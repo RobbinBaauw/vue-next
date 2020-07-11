@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="688c5fd9-29a2-4554-9b8d-522cbf44673f" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/packages/compiler-core/src/codegen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/compiler-core/src/codegen.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/compiler-core/src/transform.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/compiler-core/src/transform.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/compiler-core/src/transforms/transformExpression.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/compiler-core/src/transforms/transformExpression.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/runtime-core/src/component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/runtime-core/src/component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/runtime-core/src/componentProxy.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/runtime-core/src/componentProxy.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/runtime-core/src/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/runtime-core/src/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/build.js" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/build.js" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CodeStyleSettingsInfer">
+    <option name="done" value="true" />
+  </component>
+  <component name="GOROOT" path="/usr/local/go" />
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MacroExpansionManager">
+    <option name="directoryName" value="6aefl7g2" />
+  </component>
+  <component name="ProjectCodeStyleSettingsMigration">
+    <option name="version" value="1" />
+  </component>
+  <component name="ProjectId" id="1dmBMgdbPFJiCz1ISMcBekFlnXI" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="go.import.settings.migrated" value="true" />
+    <property name="go.sdk.automatically.set" value="true" />
+    <property name="js.linters.configure.manually.selectedeslint" value="true" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.standard" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.standard" value="project" />
+    <property name="node.js.selected.package.eslint" value="$PROJECT_DIR$/node_modules/eslint" />
+    <property name="node.js.selected.package.standard" value="" />
+    <property name="nodejs_package_manager_path" value="yarn" />
+    <property name="settings.editor.selected.configurable" value="settings.javascript.linters.eslint" />
+    <property name="ts.external.directory.path" value="$PROJECT_DIR$/node_modules/typescript/lib" />
+  </component>
+  <component name="RunManager" selected="npm.dev">
+    <configuration name="build" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="build" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration name="dev-compiler" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="dev-compiler" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration name="dev" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="dev" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration name="format" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="format" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration name="lint" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="lint" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="npm.dev" />
+        <item itemvalue="npm.dev-compiler" />
+        <item itemvalue="npm.build" />
+        <item itemvalue="npm.format" />
+        <item itemvalue="npm.lint" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="688c5fd9-29a2-4554-9b8d-522cbf44673f" name="Default Changelist" comment="" />
+      <created>1593020341650</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1593020341650</updated>
+      <workItem from="1593020345337" duration="1270000" />
+      <workItem from="1594455255672" duration="7073000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="2" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state width="2518" height="397" key="GridCell.Tab.0.bottom" timestamp="1594460155713">
+      <screen x="2560" y="0" width="2560" height="1440" />
+    </state>
+    <state width="2518" height="397" key="GridCell.Tab.0.bottom/2560.0.2560.1440/0.24.2560.1416/5120.0.2560.1440@2560.0.2560.1440" timestamp="1594460155713" />
+    <state width="2518" height="397" key="GridCell.Tab.0.center" timestamp="1594460155712">
+      <screen x="2560" y="0" width="2560" height="1440" />
+    </state>
+    <state width="2518" height="397" key="GridCell.Tab.0.center/2560.0.2560.1440/0.24.2560.1416/5120.0.2560.1440@2560.0.2560.1440" timestamp="1594460155712" />
+    <state width="2518" height="397" key="GridCell.Tab.0.left" timestamp="1594460155712">
+      <screen x="2560" y="0" width="2560" height="1440" />
+    </state>
+    <state width="2518" height="397" key="GridCell.Tab.0.left/2560.0.2560.1440/0.24.2560.1416/5120.0.2560.1440@2560.0.2560.1440" timestamp="1594460155712" />
+    <state width="2518" height="397" key="GridCell.Tab.0.right" timestamp="1594460155712">
+      <screen x="2560" y="0" width="2560" height="1440" />
+    </state>
+    <state width="2518" height="397" key="GridCell.Tab.0.right/2560.0.2560.1440/0.24.2560.1416/5120.0.2560.1440@2560.0.2560.1440" timestamp="1594460155712" />
+    <state x="3344" y="355" width="992" height="736" key="SettingsEditor" timestamp="1594456544242">
+      <screen x="2560" y="0" width="2560" height="1440" />
+    </state>
+    <state x="3344" y="355" width="992" height="736" key="SettingsEditor/2560.0.2560.1440/0.24.2560.1416/5120.0.2560.1440@2560.0.2560.1440" timestamp="1594456544242" />
+    <state width="498" height="438" key="SwitcherDM" timestamp="1594475106937">
+      <screen x="0" y="24" width="2560" height="1416" />
+    </state>
+    <state width="498" height="438" key="SwitcherDM/2560.0.2560.1440/0.24.2560.1416/5120.0.2560.1440@0.24.2560.1416" timestamp="1594475106937" />
+    <state width="498" height="445" key="SwitcherDM/2560.0.2560.1440/0.24.2560.1416/5120.0.2560.1440@2560.0.2560.1440" timestamp="1594460783462" />
+    <state x="3552" y="463" width="615" height="513" key="find.popup" timestamp="1594461129208">
+      <screen x="2560" y="0" width="2560" height="1440" />
+    </state>
+    <state x="3552" y="463" width="615" height="513" key="find.popup/2560.0.2560.1440/0.24.2560.1416/5120.0.2560.1440@2560.0.2560.1440" timestamp="1594461129208" />
+    <state x="943" y="348" width="672" height="667" key="search.everywhere.popup" timestamp="1594474970399">
+      <screen x="0" y="24" width="2560" height="1416" />
+    </state>
+    <state x="943" y="348" width="672" height="667" key="search.everywhere.popup/2560.0.2560.1440/0.24.2560.1416/5120.0.2560.1440@0.24.2560.1416" timestamp="1594474970399" />
+    <state x="3503" y="329" width="672" height="678" key="search.everywhere.popup/2560.0.2560.1440/0.24.2560.1416/5120.0.2560.1440@2560.0.2560.1440" timestamp="1594456678208" />
+  </component>
+</project>

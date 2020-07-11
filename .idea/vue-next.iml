@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/dist" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/compiler-core/dist" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/compiler-dom/dist" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/compiler-sfc/dist" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/compiler-ssr/dist" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/runtime-core/dist" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/runtime-dom/dist" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/runtime-test/dist" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/size-check/dist" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/template-explorer/dist" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/vue/dist" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+  <component name="TemplatesService">
+    <option name="TEMPLATE_FOLDERS">
+      <list>
+        <option value="$MODULE_DIR$/node_modules/conventional-changelog-atom/templates" />
+      </list>
+    </option>
+  </component>
+</module>
