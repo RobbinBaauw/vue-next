@@ -15,7 +15,8 @@ import {
   shallowReadonly,
   ReactiveFlags,
   track,
-  TrackOpTypes
+  TrackOpTypes,
+  unref
 } from '@vue/reactivity'
 import {
   ExtractComputedReturns,
@@ -198,8 +199,8 @@ export interface ComponentRenderContext {
   _: ComponentInternalInstance
 }
 
-export const PublicInstanceProxyHandlers: ProxyHandler<any> = {
-  get({ _: instance }: ComponentRenderContext, key: string) {
+export class PublicInstanceHandlers {
+  static get({ _: instance }: ComponentRenderContext, key: string) {
     const {
       ctx,
       setupState,
@@ -227,7 +228,7 @@ export const PublicInstanceProxyHandlers: ProxyHandler<any> = {
       if (n !== undefined) {
         switch (n) {
           case AccessTypes.SETUP:
-            return setupState[key]
+            return unref(setupState[key])
           case AccessTypes.DATA:
             return data[key]
           case AccessTypes.CONTEXT:
@@ -238,7 +239,7 @@ export const PublicInstanceProxyHandlers: ProxyHandler<any> = {
         }
       } else if (setupState !== EMPTY_OBJ && hasOwn(setupState, key)) {
         accessCache![key] = AccessTypes.SETUP
-        return setupState[key]
+        return unref(setupState[key])
       } else if (data !== EMPTY_OBJ && hasOwn(data, key)) {
         accessCache![key] = AccessTypes.DATA
         return data[key]
@@ -304,9 +305,9 @@ export const PublicInstanceProxyHandlers: ProxyHandler<any> = {
         )
       }
     }
-  },
+  }
 
-  set(
+  static set(
     { _: instance }: ComponentRenderContext,
     key: string,
     value: any
@@ -344,9 +345,9 @@ export const PublicInstanceProxyHandlers: ProxyHandler<any> = {
       }
     }
     return true
-  },
+  }
 
-  has(
+  static has(
     {
       _: { data, setupState, accessCache, ctx, type, appContext }
     }: ComponentRenderContext,
@@ -366,40 +367,35 @@ export const PublicInstanceProxyHandlers: ProxyHandler<any> = {
   }
 }
 
-if (__DEV__ && !__TEST__) {
-  PublicInstanceProxyHandlers.ownKeys = (target: ComponentRenderContext) => {
-    warn(
-      `Avoid app logic that relies on enumerating keys on a component instance. ` +
-        `The keys will be empty in production mode to avoid performance overhead.`
-    )
-    return Reflect.ownKeys(target)
+export class RuntimeCompiledPublicInstanceHandlers {
+  static set(
+    instance: ComponentRenderContext,
+    key: string,
+    value: any
+  ): boolean {
+    return PublicInstanceHandlers.set(instance, key, value)
+  }
+
+  static get(target: ComponentRenderContext, key: string) {
+    // fast path for unscopables when using `with` block
+    if ((key as any) === Symbol.unscopables) {
+      return
+    }
+    return PublicInstanceHandlers.get(target, key)
+  }
+
+  static has(_: ComponentRenderContext, key: string) {
+    const has = key[0] !== '_' && !isGloballyWhitelisted(key)
+    if (__DEV__ && !has && PublicInstanceHandlers.has(_, key)) {
+      warn(
+        `Property ${JSON.stringify(
+          key
+        )} should not start with _ which is a reserved prefix for Vue internals.`
+      )
+    }
+    return has
   }
 }
-
-export const RuntimeCompiledPublicInstanceProxyHandlers = extend(
-  {},
-  PublicInstanceProxyHandlers,
-  {
-    get(target: ComponentRenderContext, key: string) {
-      // fast path for unscopables when using `with` block
-      if ((key as any) === Symbol.unscopables) {
-        return
-      }
-      return PublicInstanceProxyHandlers.get!(target, key, target)
-    },
-    has(_: ComponentRenderContext, key: string) {
-      const has = key[0] !== '_' && !isGloballyWhitelisted(key)
-      if (__DEV__ && !has && PublicInstanceProxyHandlers.has!(_, key)) {
-        warn(
-          `Property ${JSON.stringify(
-            key
-          )} should not start with _ which is a reserved prefix for Vue internals.`
-        )
-      }
-      return has
-    }
-  }
-)
 
 // In dev mode, the proxy target exposes the same properties as seen on `this`
 // for easier console inspection. In prod mode it will be an empty object so

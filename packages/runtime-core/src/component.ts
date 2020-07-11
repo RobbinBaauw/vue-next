@@ -1,6 +1,5 @@
 import { VNode, VNodeChild, isVNode } from './vnode'
 import {
-  reactive,
   ReactiveEffect,
   pauseTracking,
   resetTracking,
@@ -9,8 +8,6 @@ import {
 import {
   CreateComponentPublicInstance,
   ComponentPublicInstance,
-  PublicInstanceProxyHandlers,
-  RuntimeCompiledPublicInstanceProxyHandlers,
   createRenderContext,
   exposePropsOnRenderContext,
   exposeSetupStateOnRenderContext
@@ -473,7 +470,7 @@ function setupStatefulComponent(
   instance.accessCache = {}
   // 1. create public instance / render proxy
   // also mark it raw so it's never observed
-  instance.proxy = new Proxy(instance.ctx, PublicInstanceProxyHandlers)
+  instance.proxy = instance.ctx as any
   if (__DEV__) {
     exposePropsOnRenderContext(instance)
   }
@@ -535,7 +532,7 @@ export function handleSetupResult(
     }
     // setup returned bindings.
     // assuming a render function compiled from template is present.
-    instance.setupState = reactive(setupResult)
+    instance.setupState = setupResult
     if (__DEV__) {
       exposeSetupStateOnRenderContext(instance)
     }
@@ -615,10 +612,7 @@ function finishComponentSetup(
     // proxy used needs a different `has` handler which is more performant and
     // also only allows a whitelist of globals to fallthrough.
     if (instance.render._rc) {
-      instance.withProxy = new Proxy(
-        instance.ctx,
-        RuntimeCompiledPublicInstanceProxyHandlers
-      )
+      instance.withProxy = instance.ctx as any
     }
   }
 
