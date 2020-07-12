@@ -1,6 +1,5 @@
 import { VNode, VNodeChild, isVNode } from './vnode'
 import {
-  reactive,
   ReactiveEffect,
   pauseTracking,
   resetTracking,
@@ -9,11 +8,11 @@ import {
 import {
   CreateComponentPublicInstance,
   ComponentPublicInstance,
-  PublicInstanceProxyHandlers,
-  RuntimeCompiledPublicInstanceProxyHandlers,
   createRenderContext,
   exposePropsOnRenderContext,
-  exposeSetupStateOnRenderContext
+  exposeSetupStateOnRenderContext,
+  RuntimeCompiledPublicInstanceProxyHandlers,
+  PublicInstanceProxyHandlers
 } from './componentProxy'
 import {
   ComponentPropsOptions,
@@ -535,7 +534,7 @@ export function handleSetupResult(
     }
     // setup returned bindings.
     // assuming a render function compiled from template is present.
-    instance.setupState = reactive(setupResult)
+    instance.setupState = setupResult
     if (__DEV__) {
       exposeSetupStateOnRenderContext(instance)
     }

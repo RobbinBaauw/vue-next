@@ -15,7 +15,9 @@ import {
   shallowReadonly,
   ReactiveFlags,
   track,
-  TrackOpTypes
+  TrackOpTypes,
+  unref,
+  isRef
 } from '@vue/reactivity'
 import {
   ExtractComputedReturns,
@@ -227,7 +229,7 @@ export const PublicInstanceProxyHandlers: ProxyHandler<any> = {
       if (n !== undefined) {
         switch (n) {
           case AccessTypes.SETUP:
-            return setupState[key]
+            return unref(setupState[key])
           case AccessTypes.DATA:
             return data[key]
           case AccessTypes.CONTEXT:
@@ -238,7 +240,7 @@ export const PublicInstanceProxyHandlers: ProxyHandler<any> = {
         }
       } else if (setupState !== EMPTY_OBJ && hasOwn(setupState, key)) {
         accessCache![key] = AccessTypes.SETUP
-        return setupState[key]
+        return unref(setupState[key])
       } else if (data !== EMPTY_OBJ && hasOwn(data, key)) {
         accessCache![key] = AccessTypes.DATA
         return data[key]
@@ -313,7 +315,8 @@ export const PublicInstanceProxyHandlers: ProxyHandler<any> = {
   ): boolean {
     const { data, setupState, ctx } = instance
     if (setupState !== EMPTY_OBJ && hasOwn(setupState, key)) {
-      setupState[key] = value
+      let setupValue = setupState[key]
+      isRef(setupValue) ? (setupValue.value = value) : (setupState[key] = value)
     } else if (data !== EMPTY_OBJ && hasOwn(data, key)) {
       data[key] = value
     } else if (key in instance.props) {

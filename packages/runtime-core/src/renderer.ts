@@ -320,7 +320,12 @@ export const setRef = (
     refs[ref] = value
     if (hasOwn(setupState, ref)) {
       queuePostRenderEffect(() => {
-        setupState[ref] = value
+        const setupStateRef = setupState[ref]
+        if (isRef(setupStateRef)) {
+          setupStateRef.value = value
+        } else {
+          setupState[ref] = value
+        }
       }, parentSuspense)
     }
   } else if (isRef(ref)) {
