@@ -10,7 +10,9 @@ import {
   ComponentPublicInstance,
   createRenderContext,
   exposePropsOnRenderContext,
-  exposeSetupStateOnRenderContext
+  exposeSetupStateOnRenderContext,
+  RuntimeCompiledPublicInstanceProxyHandlers,
+  PublicInstanceProxyHandlers
 } from './componentProxy'
 import {
   ComponentPropsOptions,
@@ -470,7 +472,7 @@ function setupStatefulComponent(
   instance.accessCache = {}
   // 1. create public instance / render proxy
   // also mark it raw so it's never observed
-  instance.proxy = instance.ctx as any
+  instance.proxy = new Proxy(instance.ctx, PublicInstanceProxyHandlers)
   if (__DEV__) {
     exposePropsOnRenderContext(instance)
   }
@@ -612,7 +614,10 @@ function finishComponentSetup(
     // proxy used needs a different `has` handler which is more performant and
     // also only allows a whitelist of globals to fallthrough.
     if (instance.render._rc) {
-      instance.withProxy = instance.ctx as any
+      instance.withProxy = new Proxy(
+        instance.ctx,
+        RuntimeCompiledPublicInstanceProxyHandlers
+      )
     }
   }
 

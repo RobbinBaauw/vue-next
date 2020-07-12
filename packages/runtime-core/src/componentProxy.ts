@@ -16,7 +16,8 @@ import {
   ReactiveFlags,
   track,
   TrackOpTypes,
-  unref
+  unref,
+  isRef
 } from '@vue/reactivity'
 import {
   ExtractComputedReturns,
@@ -199,8 +200,8 @@ export interface ComponentRenderContext {
   _: ComponentInternalInstance
 }
 
-export class PublicInstanceHandlers {
-  static get({ _: instance }: ComponentRenderContext, key: string) {
+export const PublicInstanceProxyHandlers: ProxyHandler<any> = {
+  get({ _: instance }: ComponentRenderContext, key: string) {
     const {
       ctx,
       setupState,
@@ -305,16 +306,17 @@ export class PublicInstanceHandlers {
         )
       }
     }
-  }
+  },
 
-  static set(
+  set(
     { _: instance }: ComponentRenderContext,
     key: string,
     value: any
   ): boolean {
     const { data, setupState, ctx } = instance
     if (setupState !== EMPTY_OBJ && hasOwn(setupState, key)) {
-      setupState[key] = value
+      let setupValue = setupState[key]
+      isRef(setupValue) ? (setupValue.value = value) : (setupState[key] = value)
     } else if (data !== EMPTY_OBJ && hasOwn(data, key)) {
       data[key] = value
     } else if (key in instance.props) {
@@ -345,9 +347,9 @@ export class PublicInstanceHandlers {
       }
     }
     return true
-  }
+  },
 
-  static has(
+  has(
     {
       _: { data, setupState, accessCache, ctx, type, appContext }
     }: ComponentRenderContext,
@@ -367,35 +369,40 @@ export class PublicInstanceHandlers {
   }
 }
 
-export class RuntimeCompiledPublicInstanceHandlers {
-  static set(
-    instance: ComponentRenderContext,
-    key: string,
-    value: any
-  ): boolean {
-    return PublicInstanceHandlers.set(instance, key, value)
-  }
-
-  static get(target: ComponentRenderContext, key: string) {
-    // fast path for unscopables when using `with` block
-    if ((key as any) === Symbol.unscopables) {
-      return
-    }
-    return PublicInstanceHandlers.get(target, key)
-  }
-
-  static has(_: ComponentRenderContext, key: string) {
-    const has = key[0] !== '_' && !isGloballyWhitelisted(key)
-    if (__DEV__ && !has && PublicInstanceHandlers.has(_, key)) {
-      warn(
-        `Property ${JSON.stringify(
-          key
-        )} should not start with _ which is a reserved prefix for Vue internals.`
-      )
-    }
-    return has
+if (__DEV__ && !__TEST__) {
+  PublicInstanceProxyHandlers.ownKeys = (target: ComponentRenderContext) => {
+    warn(
+      `Avoid app logic that relies on enumerating keys on a component instance. ` +
+        `The keys will be empty in production mode to avoid performance overhead.`
+    )
+    return Reflect.ownKeys(target)
   }
 }
+
+export const RuntimeCompiledPublicInstanceProxyHandlers = extend(
+  {},
+  PublicInstanceProxyHandlers,
+  {
+    get(target: ComponentRenderContext, key: string) {
+      // fast path for unscopables when using `with` block
+      if ((key as any) === Symbol.unscopables) {
+        return
+      }
+      return PublicInstanceProxyHandlers.get!(target, key, target)
+    },
+    has(_: ComponentRenderContext, key: string) {
+      const has = key[0] !== '_' && !isGloballyWhitelisted(key)
+      if (__DEV__ && !has && PublicInstanceProxyHandlers.has!(_, key)) {
+        warn(
+          `Property ${JSON.stringify(
+            key
+          )} should not start with _ which is a reserved prefix for Vue internals.`
+        )
+      }
+      return has
+    }
+  }
+)
 
 // In dev mode, the proxy target exposes the same properties as seen on `this`
 // for easier console inspection. In prod mode it will be an empty object so

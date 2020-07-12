@@ -31,7 +31,6 @@ import {
 import { createCompilerError, ErrorCodes } from '../errors'
 import { Node, Function, Identifier, ObjectProperty } from '@babel/types'
 import { validateBrowserExpression } from '../validateExpression'
-import { PUBLIC_INSTANCE_HANDLERS } from '@vue/compiler-core'
 
 const isLiteralWhitelisted = /*#__PURE__*/ makeMap('true,false,null,this')
 
@@ -103,9 +102,10 @@ export function processExpression(
 
   const { bindingMetadata } = context
   const prefix = (raw: string) => {
-    return hasOwn(bindingMetadata, raw)
-      ? `${bindingMetadata[raw]}.${raw}`
-      : `_PublicInstanceHandlers.get(_ctx, "${raw}")`
+    const source = hasOwn(bindingMetadata, raw)
+      ? `$` + bindingMetadata[raw]
+      : `_ctx`
+    return `${source}.${raw}`
   }
 
   // fast path if expression is a simple identifier.
@@ -119,7 +119,6 @@ export function processExpression(
       !isGloballyWhitelisted(rawExp) &&
       !isLiteralWhitelisted(rawExp)
     ) {
-      context.helper(PUBLIC_INSTANCE_HANDLERS)
       node.content = prefix(rawExp)
     } else if (!context.identifiers[rawExp] && !bailConstant) {
       // mark node constant for hoisting unless it's referring a scope variable
@@ -170,7 +169,6 @@ export function processExpression(
               // rewrite the value
               node.prefix = `${node.name}: `
             }
-            context.helper(PUBLIC_INSTANCE_HANDLERS)
             node.name = prefix(node.name)
             ids.push(node)
           } else if (!isStaticPropertyKey(node, parent)) {

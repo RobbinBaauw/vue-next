@@ -168,7 +168,6 @@ export {
   RenderFunction
 } from './componentOptions'
 export {
-  PublicInstanceHandlers,
   ComponentPublicInstance,
   ComponentCustomProperties
 } from './componentProxy'

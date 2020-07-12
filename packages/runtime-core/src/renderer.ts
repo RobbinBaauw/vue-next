@@ -323,6 +323,8 @@ export const setRef = (
         const setupStateRef = setupState[ref]
         if (isRef(setupStateRef)) {
           setupStateRef.value = value
+        } else {
+          setupState[ref] = value
         }
       }, parentSuspense)
     }
