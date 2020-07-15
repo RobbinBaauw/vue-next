@@ -7,7 +7,7 @@ import {
   ReactiveEffectOptions,
   isReactive
 } from '@vue/reactivity'
-import { queueJob } from './scheduler'
+import { PostFlushCb, queueJob } from './scheduler'
 import {
   EMPTY_OBJ,
   isObject,
@@ -60,6 +60,7 @@ type InvalidateCbRegistrator = (cb: () => void) => void
 
 export interface WatchOptionsBase {
   flush?: 'pre' | 'post' | 'sync'
+  flushPostOrder?: number
   onTrack?: ReactiveEffectOptions['onTrack']
   onTrigger?: ReactiveEffectOptions['onTrigger']
 }
@@ -133,7 +134,14 @@ export function watch<T = any>(
 function doWatch(
   source: WatchSource | WatchSource[] | WatchEffect,
   cb: WatchCallback | null,
-  { immediate, deep, flush, onTrack, onTrigger }: WatchOptions = EMPTY_OBJ,
+  {
+    immediate,
+    deep,
+    flush,
+    flushPostOrder,
+    onTrack,
+    onTrigger
+  }: WatchOptions = EMPTY_OBJ,
   instance = currentInstance
 ): WatchStopHandle {
   if (__DEV__ && !cb) {
@@ -270,7 +278,10 @@ function doWatch(
       }
     }
   } else {
-    scheduler = job => queuePostRenderEffect(job, instance && instance.suspense)
+    scheduler = job => {
+      ;(job as PostFlushCb).order = flushPostOrder
+      queuePostRenderEffect(job, instance && instance.suspense)
+    }
   }
 
   const runner = effect(getter, {

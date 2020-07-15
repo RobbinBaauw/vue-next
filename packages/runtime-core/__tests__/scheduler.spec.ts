@@ -2,7 +2,7 @@ import {
   queueJob,
   nextTick,
   queuePostFlushCb,
-  invalidateJob
+  invalidateJob, PostFlushCb
 } from '../src/scheduler'
 
 describe('scheduler', () => {
@@ -133,6 +133,32 @@ describe('scheduler', () => {
 
       await nextTick()
       expect(calls).toEqual(['cb1', 'cb2'])
+    })
+
+    it('should handle priorities properly', async () => {
+      const calls: string[] = []
+
+      const cb1 = () => {
+        calls.push('cb1')
+      }
+      (cb1 as PostFlushCb).order = 0
+
+      const cb2 = () => {
+        calls.push('cb2')
+        queuePostFlushCb(cb1)
+        queuePostFlushCb(cb1)
+      }
+      (cb2 as PostFlushCb).order = 1
+
+      const cb3 = () => {
+        calls.push('cb3')
+      }
+      (cb3 as PostFlushCb).order = 2
+
+      queuePostFlushCb([cb1, cb2, cb3])
+
+      await nextTick()
+      expect(calls).toEqual(['cb1', 'cb2', 'cb1', 'cb3'])
     })
   })
 

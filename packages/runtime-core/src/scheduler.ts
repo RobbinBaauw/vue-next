@@ -1,13 +1,18 @@
 import { ErrorCodes, callWithErrorHandling } from './errorHandling'
 import { isArray } from '@vue/shared'
+import {PriorityQueue} from "./priorityqueue";
 
 export interface Job {
   (): void
   id?: number
 }
 
+export type PostFlushCb = Function & {
+  order?: number
+}
+
 const queue: (Job | null)[] = []
-const postFlushCbs: Function[] = []
+const postFlushCbs: PriorityQueue<Function> = new PriorityQueue()
 const p = Promise.resolve()
 
 let isFlushing = false
@@ -34,11 +39,14 @@ export function invalidateJob(job: Job) {
   }
 }
 
-export function queuePostFlushCb(cb: Function | Function[]) {
+export function queuePostFlushCb(cb: PostFlushCb | PostFlushCb[]) {
   if (!isArray(cb)) {
-    postFlushCbs.push(cb)
+    postFlushCbs.push(cb, cb.order ?? 0)
   } else {
-    postFlushCbs.push(...cb)
+    const n = cb.length
+    for (let i = 0; i < n; i++) {
+      postFlushCbs.push(cb[i], cb[i].order ?? 0)
+    }
   }
   queueFlush()
 }
@@ -51,17 +59,16 @@ function queueFlush() {
 }
 
 export function flushPostFlushCbs(seen?: CountMap) {
-  if (postFlushCbs.length) {
-    const cbs = [...new Set(postFlushCbs)]
-    postFlushCbs.length = 0
+  if (postFlushCbs.size) {
     if (__DEV__) {
       seen = seen || new Map()
     }
-    for (let i = 0; i < cbs.length; i++) {
+    while (postFlushCbs.size) {
+      const cb = postFlushCbs.pop()!
       if (__DEV__) {
-        checkRecursiveUpdates(seen!, cbs[i])
+        checkRecursiveUpdates(seen!, cb)
       }
-      cbs[i]()
+      cb()
     }
   }
 }
@@ -100,7 +107,7 @@ function flushJobs(seen?: CountMap) {
   isFlushing = false
   // some postFlushCb queued jobs!
   // keep flushing until it drains.
-  if (queue.length || postFlushCbs.length) {
+  if (queue.length || postFlushCbs.size) {
     flushJobs(seen)
   }
 }
