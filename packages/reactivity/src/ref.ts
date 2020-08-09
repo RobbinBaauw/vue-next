@@ -7,6 +7,7 @@ import { CollectionTypes } from './collectionHandlers'
 declare const RefSymbol: unique symbol
 
 export interface Ref<T = any> {
+  (value?: T): void
   /**
    * Type differentiator only.
    * We need this to be in public d.ts but don't want it to show up in IDE
@@ -46,21 +47,30 @@ function createRef(rawValue: unknown, shallow = false) {
     return rawValue
   }
   let value = shallow ? rawValue : convert(rawValue)
-  const r = {
-    __v_isRef: true,
-    get value() {
-      track(r, TrackOpTypes.GET, 'value')
+
+  const refFunction = <Ref>function(newVal?: unknown) {
+    if (!arguments.length) {
+      track(refFunction, TrackOpTypes.GET, 'value')
       return value
-    },
-    set value(newVal) {
+    } else {
       if (hasChanged(toRaw(newVal), rawValue)) {
         rawValue = newVal
         value = shallow ? newVal : convert(newVal)
-        trigger(r, TriggerOpTypes.SET, 'value', newVal)
+        trigger(refFunction, TriggerOpTypes.SET, 'value', newVal)
       }
     }
   }
-  return r
+
+  Object.assign(refFunction, {
+    __v_isRef: true
+  })
+
+  Object.defineProperty(refFunction, 'value', {
+    get: refFunction,
+    set: refFunction
+  })
+
+  return refFunction
 }
 
 export function triggerRef(ref: Ref) {
