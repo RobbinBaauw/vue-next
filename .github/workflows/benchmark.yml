@@ -1,0 +1,28 @@
+name: 'benchmark'
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    env:
+      CI_JOB_NUMBER: 1
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+      - uses: bahmutov/npm-install@v1
+      - run: yarn run benchmark
+      - name: Run benchmark
+        run: cd packages/benchmark && node dist/benchmark.global.prod.js | tee benchmark-output.txt
+      - name: Store benchmark result
+        uses: rhysd/github-action-benchmark@v1
+        with:
+          name: Benchmark
+          tool: 'benchmarkjs'
+          output-file-path: packages/benchmark/benchmark-output.txt
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          comment-always: true
