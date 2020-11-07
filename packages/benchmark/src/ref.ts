@@ -1,40 +1,44 @@
+import { Suite } from 'benchmark'
+import { ref } from 'vue'
+
+import { bench } from './bench'
+
 // Doesn't work otherwise
 // eslint-disable-next-line no-restricted-globals
 const Benchmark = require('benchmark')
-import { ref } from 'vue'
 
-export function benchmarkRef() {
+export function benchmarkRef(): Suite {
   const suite = new Benchmark.Suite()
 
-  {
-    suite.add('create ref', () => {
+  bench(() => {
+    return suite.add('create ref', () => {
       ref(100)
     })
-  }
+  })
 
-  {
+  bench(() => {
     let i = 0
     const v = ref(100)
-    suite.add('write ref', () => {
+    return suite.add('write ref', () => {
       v.value = i++
     })
-  }
+  })
 
-  {
+  bench(() => {
     const v = ref(100)
-    suite.add('read ref', () => {
+    return suite.add('read ref', () => {
       v.value
     })
-  }
+  })
 
-  {
+  bench(() => {
     let i = 0
     const v = ref(100)
-    suite.add('write/read ref', () => {
+    return suite.add('write/read ref', () => {
       v.value = i++
       v.value
     })
-  }
+  })
 
   return suite
 }

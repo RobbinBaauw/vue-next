@@ -15,14 +15,8 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
       - uses: bahmutov/npm-install@v1
-      - run: yarn run benchmark
-      - name: Run benchmark
-        run: cd packages/benchmark && node dist/benchmark.global.prod.js | tee benchmark-output.txt
       - name: Store benchmark result
-        uses: rhysd/github-action-benchmark@v1
+        uses: RobbinBaauw/benchmark-action@v0.1-alpha
         with:
-          name: Benchmark
-          tool: 'benchmarkjs'
-          output-file-path: packages/benchmark/benchmark-output.txt
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          comment-always: true
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          benchmark_script: benchmark
