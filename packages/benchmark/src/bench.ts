@@ -4,6 +4,7 @@ export interface BenchmarkResult {
   name: string
   category: string
   result: string
+  opsPerSecond: number
   extraFields: Record<string, string>
 }
 
@@ -20,9 +21,14 @@ export function benchmarkCategory(category: string, cb: () => Suite) {
     .on('cycle', (event: Event) => {
       const target = event.target
 
-      const code = benchmarkFunctions.get((target as any) as Benchmark)
-      const stats = target.stats
+      let code = benchmarkFunctions.get((target as any) as Benchmark)
+      if (code) {
+        code = '```ts\n' + code + '\n```'
+      } else {
+        code = 'unknown'
+      }
 
+      const stats = target.stats
       let opsPerSecond = target.hz ? target.hz : -Infinity
       let deviation = stats ? stats.deviation : -Infinity
       let samples = stats ? stats.sample.length : -Infinity
@@ -32,9 +38,12 @@ export function benchmarkCategory(category: string, cb: () => Suite) {
         // don't support the ?? syntax yet :(
         name: target.name ? target.name : 'unknown',
         category: category,
-        result: `${opsPerSecond} ops/sec, ±${deviation}%, ${samples} samples`,
+        result: `${opsPerSecond.toFixed(2)} ops/sec, ±${deviation.toFixed(
+          2
+        )}%, ${samples} samples`,
+        opsPerSecond,
         extraFields: {
-          code: code ? code : 'unknown'
+          Code: code
         }
       }
 
