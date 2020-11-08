@@ -1,7 +1,7 @@
 import { Suite } from 'benchmark'
 import { ref } from 'vue'
 
-import { bench } from './bench'
+import { bench } from '../bench'
 
 // Doesn't work otherwise
 // eslint-disable-next-line no-restricted-globals
