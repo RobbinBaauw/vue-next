@@ -53,5 +53,5 @@ export function benchmarkCategory(category: string, cb: () => Suite) {
 }
 
 export function printBenchmarks() {
-  console.log(`Benchmark results: ${JSON.stringify(benchmarks)}`)
+  console.log(JSON.stringify(benchmarks))
 }

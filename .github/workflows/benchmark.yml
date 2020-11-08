@@ -18,4 +18,5 @@ jobs:
       - uses: RobbinBaauw/benchmark-action@v1.0.0-alpha.1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          output_file: packages/benchmark/out.json
           benchmark_script: benchmark
