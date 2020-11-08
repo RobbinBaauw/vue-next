@@ -6,6 +6,9 @@
   ],
   "scripts": {
     "dev": "node scripts/dev.js",
+    "benchmark": "yarn benchmark:build && yarn benchmark:run",
+    "benchmark:build": "node scripts/build.js vue benchmark -p -f global",
+    "benchmark:run": "node packages/benchmark/dist/benchmark.global.prod.js | tee packages/benchmark/out.json",
     "build": "node scripts/build.js",
     "size": "node scripts/build.js vue runtime-dom size-check -p -f global",
     "lint": "eslint --ext .ts packages/*/src/**",
