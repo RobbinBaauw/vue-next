@@ -1,18 +1,16 @@
-import Benchmark, { Event, Suite } from 'benchmark'
+import { Event, Suite } from 'benchmark'
 
 export interface BenchmarkResult {
   name: string
   category: string
   result: string
   opsPerSecond: number
-  extraFields: Record<string, string>
+  extraFields?: Record<string, string>
 }
 
-const benchmarkFunctions: Map<Benchmark, string> = new Map()
 export function bench(cb: () => Suite) {
-  const suite = (cb() as any) as Benchmark[]
-  const benchmark = suite[suite.length - 1]
-  benchmarkFunctions.set(benchmark, cb.toString())
+  cb()
+  // executes for each benchmark
 }
 
 const benchmarks: BenchmarkResult[] = []
@@ -20,13 +18,6 @@ export function benchmarkCategory(category: string, cb: () => Suite) {
   cb()
     .on('cycle', (event: Event) => {
       const target = event.target
-
-      let code = benchmarkFunctions.get((target as any) as Benchmark)
-      if (code) {
-        code = '```ts\n' + code + '\n```'
-      } else {
-        code = 'unknown'
-      }
 
       const stats = target.stats
       let opsPerSecond = target.hz ? target.hz : -Infinity
@@ -41,10 +32,7 @@ export function benchmarkCategory(category: string, cb: () => Suite) {
         result: `${opsPerSecond.toFixed(2)} ops/sec, ±${deviation.toFixed(
           2
         )}%, ${samples} samples`,
-        opsPerSecond,
-        extraFields: {
-          Code: code
-        }
+        opsPerSecond
       }
 
       benchmarks.push(benchmarkResult)
