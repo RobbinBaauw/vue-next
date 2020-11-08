@@ -15,8 +15,8 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
       - uses: bahmutov/npm-install@v1
-      - name: Store benchmark result
-        uses: RobbinBaauw/benchmark-action@v0.1-alpha
+      - name: Run benchmark
+        uses: RobbinBaauw/benchmark-action@v1.0.0-alpha.1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           benchmark_script: benchmark
